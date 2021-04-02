@@ -20,6 +20,19 @@ object Main extends App {
 //    (0.16, -0.08, .0,   -0.12),
 //    (0.09, 0.21, -0.13, .0)
 //  )
+//
+//  val b = DenseVector(2.43, -1.12, 0.43, 0.83)
+
+//  A.rowsIterator.map(_ * DenseVector.zeros[Double](4) + 1.0).foreach(println)
+
+//  print("Simple iterations: ")
+//  val simple = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = true)
+//  println(simple)
+//  print("Seidel iterations: ")
+//  val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = true)
+
+//  println(s"Simple accuracy: ${simple - (A * simple + b)}")
+//  println(s"Seidel accuracy: ${seidel - (A * seidel + b)}")
 
   val A = DenseMatrix(
     (5.4, -2.4, 3.8),
@@ -31,7 +44,6 @@ object Main extends App {
 
 //  val c = A.withColumn(0, DenseVector(2.43, -1.12, 0.43, 0.83))
 //  println(c)
-//  val b = DenseVector(2.43, -1.12, 0.43, 0.83)
 
   val cramer = Solver.solve(SolveMethod.Cramer, A, b)
   val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = false)
