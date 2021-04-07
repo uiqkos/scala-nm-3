@@ -36,15 +36,14 @@ object Solver {
   }
 
   // todo: reduced matrix.norm < 1
-  def reduceMatrix(A: DenseMatrix[Double], useMax: Boolean = true): DenseMatrix[Double] = {
-    val maxA = max(A)
+  def reduceMatrix(A: DenseMatrix[Double], m: Double = 1.0): DenseMatrix[Double] = {
     A.rowsIterator
       .zipWithIndex
       .map(tupled(
         (row, rowIndex) => row.iterator.map(tupled(
           (columnIndex, element) =>
-            if (columnIndex == rowIndex) (maxA - row(rowIndex)) / maxA
-            else -element
+            if (columnIndex == rowIndex) (m - row(rowIndex)) / m
+            else -element / m
         ))
       ))
       .map(vector => DenseMatrix(vector.toArray))
@@ -61,8 +60,6 @@ object Solver {
 
     val norms = List(C.norm1, C.norm2, C.normInfinity)
     val q = norms.min
-
-    println(norms)
 
     if (q >= 1)
       throw new Exception(s"Сходимость не может быть достигнута " +
@@ -108,11 +105,11 @@ object Solver {
     do {
       XPrev = X.copy
       for (((i, c), f) <- X.activeKeysIterator.zip(C.rowsIterator).zip(F.activeValuesIterator)) {
-        X.update(i, sum(c * X + f))
+        X.update(i, sum(c * X) + f)
       }
       i += 1
     } while (
-      (q / (1 - q)) * (X - XPrev).norm2 >= accuracy &&
+      (q / (1 - q)) * (X - XPrev).norm2 > accuracy &&
         i < maxIterations
     )
     println(i)
@@ -121,10 +118,12 @@ object Solver {
 
   def solveCramer(C: DenseMatrix[Double], F: DenseVector[Double]): DenseVector[Double] = {
     val CDet = det(C)
-    val dets = (0 until C.cols)
+    DenseVector(
+      (0 until C.cols)
       .map(i => C.withColumn(i, F))
       .map(det(_))
-    DenseVector(dets.map(_ / CDet).toArray)
+      .map(_ / CDet).toArray
+    )
   }
 
   def solve(
@@ -136,7 +135,7 @@ object Solver {
    accuracy: Double = 0.001
   ): DenseVector[Double] = {
     val C = if (isReduced) A else reduceMatrix(A)
-    println(C)
+//    println(C)
     method match {
       case SimpleIteration => solveSimpleIteration(C, F, maxIterations, accuracy)
       case Seidel => solveSeidel(C, F, maxIterations, accuracy)

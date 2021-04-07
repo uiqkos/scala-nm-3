@@ -2,6 +2,7 @@ import breeze.plot._
 import breeze.linalg._
 import breeze.stats.mean
 import Solver.CustomDenseMatrix
+import breeze.numerics.pow
 object Main extends App {
 //  var fig = Figure()
 //  var plt = fig.subplot(0)
@@ -45,16 +46,30 @@ object Main extends App {
 //  val c = A.withColumn(0, DenseVector(2.43, -1.12, 0.43, 0.83))
 //  println(c)
 
-  val cramer = Solver.solve(SolveMethod.Cramer, A, b)
-  val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = false)
-  val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = false)
+//  val cramer = Solver.solve(SolveMethod.Cramer, A, b)
 
-  println(cramer)
-  println(simpleIterations)
-  println(seidel)
+  for (power <- 1 to 5) {
+    val accuracy = pow(10.0, -power)
+    println(s"Accuracy: ${accuracy}")
+    print(f"Simple iteration iterations: ")
+    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = true, accuracy = accuracy)
+    print(f"Seidel iterations: ")
+    val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = true, accuracy = accuracy)
 
-  println(s"Simple accuracy = ${mean(cramer - simpleIterations)}")
-  println(s"Seidel accuracy = ${mean(cramer - seidel)}")
+    println(simpleIterations)
+    println(seidel)
+  }
 
+
+//  println(cramer)
+//  println(simpleIterations)
+//  println(seidel)
+
+//  println(s"Simple accuracy = ${mean(cramer - simpleIterations)}")
+//  println(s"Seidel accuracy = ${mean(cramer - seidel)}")
+
+  // 1. b + 6.0*(a_ - 2.0*c) = c
+  // 2. (a_ - c)*3.0 + b = a
+// List(a, b, c).map(x => x.toDenseMatrix.reshape(1, 3)).reduce(DenseMatrix.vertcat(_, _))
 //  fig.refresh()
 }
