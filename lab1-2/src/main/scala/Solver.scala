@@ -1,7 +1,5 @@
-import Main.A
 import SolveMethod._
 import breeze.linalg.{sum, _}
-import spire.math.Polynomial.x
 
 import math.{abs, pow, sqrt}
 import scala.Function.tupled
@@ -63,25 +61,23 @@ object Solver {
 
     if (q >= 1)
       throw new Exception(s"Сходимость не может быть достигнута " +
-        s"(коэффициент сходимости: ${max(norms)})")
+        s"(коэффициент сходимости: $q)")
 
-//    println(maxIterations)
-
-    var x = DenseVector.zeros[Double](F.size) // x₀
-    var xPrev = x
+    var X = DenseVector.zeros[Double](F.size) // x₀
+    var XPrev = X
     var i = 0
 
     // xᵢ = Cxᵢ₋₁+ f
     do {
-      xPrev = x
-      x = C * x + F
+      XPrev = X
+      X = C * X + F
       i += 1
     } while (
-      (q / (1 - q)) * (x - xPrev).norm2 > accuracy &&
+      (q / (1 - q)) * (X - XPrev).normInfinity >= accuracy &&
         i < maxIterations
     )
     println(i)
-    x
+    X
   }
 
   def solveSeidel(
@@ -93,9 +89,9 @@ object Solver {
     val norms = List(C.norm1, C.norm2, C.normInfinity)
     val q = norms.min
 
-    if (norms.max >= 1)
+    if (q >= 1)
       throw new Exception(s"Сходимость не может быть достигнута " +
-        s"(коэффициент сходимости: ${max(norms)})")
+        s"(коэффициент сходимости: $q)")
 
     var X = DenseVector.zeros[Double](F.size) // X₀
     var XPrev = X
@@ -109,7 +105,7 @@ object Solver {
       }
       i += 1
     } while (
-      (q / (1 - q)) * (X - XPrev).norm2 > accuracy &&
+      (q / (1 - q)) * (X - XPrev).normInfinity >= accuracy &&
         i < maxIterations
     )
     println(i)
@@ -132,13 +128,14 @@ object Solver {
    F: DenseVector[Double],
    isReduced: Boolean = false,
    maxIterations: Int = 100,
-   accuracy: Double = 0.001
+   accuracy: Double = 0.001,
+   m: Double = 1.0
   ): DenseVector[Double] = {
-    val C = if (isReduced) A else reduceMatrix(A)
-//    println(C)
+    val C = if (isReduced) A else reduceMatrix(A, m = m)
+
     method match {
-      case SimpleIteration => solveSimpleIteration(C, F, maxIterations, accuracy)
-      case Seidel => solveSeidel(C, F, maxIterations, accuracy)
+      case SimpleIteration => solveSimpleIteration(C, F / m, maxIterations, accuracy)
+      case Seidel => solveSeidel(C, F / m, maxIterations, accuracy)
       case Cramer => solveCramer(C, F)
     }
   }

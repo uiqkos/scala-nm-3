@@ -3,6 +3,9 @@ import breeze.linalg._
 import breeze.stats.mean
 import Solver.CustomDenseMatrix
 import breeze.numerics.pow
+import Utils._
+
+
 object Main extends App {
 //  var fig = Figure()
 //  var plt = fig.subplot(0)
@@ -35,29 +38,60 @@ object Main extends App {
 //  println(s"Simple accuracy: ${simple - (A * simple + b)}")
 //  println(s"Seidel accuracy: ${seidel - (A * seidel + b)}")
 
-  val A = DenseMatrix(
-    (5.4, -2.4, 3.8),
-    (2.5, 6.8, -1.1),
-    (2.7, -0.6, 1.5)
-  )
+//  val A = DenseMatrix(
+//    (5.4, -2.4, 3.8),
+//    (2.5, 6.8, -1.1),
+//    (2.7, -0.6, 1.5)
+//  )
+//
 
-  val b = DenseVector(5.5, 4.3, -3.5)
 
 //  val c = A.withColumn(0, DenseVector(2.43, -1.12, 0.43, 0.83))
 //  println(c)
 
 //  val cramer = Solver.solve(SolveMethod.Cramer, A, b)
 
+
+  var a = DenseVector(5.4, -2.4, 3.8)
+  var b = DenseVector(2.5, 6.8, -1.1)
+  var c = DenseVector(2.7, -0.6, 1.5)
+
+  var f = DenseVector(5.5, 4.3, -3.5)
+
+  c = b + 6.0 * (a - 2.0 * c)
+  a = (a - c) * 3.0 + b
+
+  f.update(2, f(1) + 6.0 * (f(0) - 2.0 * f(2)))
+  f.update(0, (f(0) - f(2)) * 3.0 + f(1))
+
+  val C = concatRowsToDenseMatrix(a, b, c)
+
+  println(C)
+  println(f)
+
+  val cramer = Solver.solveCramer(C, f)
+  println(cramer)
+
   for (power <- 1 to 5) {
     val accuracy = pow(10.0, -power)
-    println(s"Accuracy: ${accuracy}")
-    print(f"Simple iteration iterations: ")
-    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = true, accuracy = accuracy)
-    print(f"Seidel iterations: ")
-    val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = true, accuracy = accuracy)
+    println(s"Accuracy: $accuracy")
+
+    print("Simple iterations: ")
+//    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = true, accuracy = accuracy)
+    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, C, f, isReduced = false, accuracy = accuracy, m = 10)
+
+    print("Seidel iterations: ")
+//    val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = true, accuracy = accuracy)
+    val seidel = Solver.solve(SolveMethod.Seidel, C, f, isReduced = false, accuracy = accuracy, m = 10)
 
     println(simpleIterations)
     println(seidel)
+
+    println(s"Simple accuracy: ${C * simpleIterations - f}, ${simpleIterations - cramer}")
+    println(s"Seidel accuracy: ${C * seidel - f}, ${seidel - cramer}")
+
+    println()
+
   }
 
 
