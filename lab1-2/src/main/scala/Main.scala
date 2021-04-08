@@ -5,6 +5,8 @@ import Solver.CustomDenseMatrix
 import breeze.numerics.pow
 import Utils._
 
+import scala.collection.mutable.ListBuffer
+
 
 object Main extends App {
 //  var fig = Figure()
@@ -78,21 +80,68 @@ object Main extends App {
 
     print("Simple iterations: ")
 //    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, A, b, isReduced = true, accuracy = accuracy)
-    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, C, f, isReduced = false, accuracy = accuracy, m = 10)
+    val (simpleIterations, i1) = Solver.solve(SolveMethod.SimpleIteration, C, f, isReduced = false, accuracy = accuracy, m = 10)
 
     print("Seidel iterations: ")
 //    val seidel = Solver.solve(SolveMethod.Seidel, A, b, isReduced = true, accuracy = accuracy)
-    val seidel = Solver.solve(SolveMethod.Seidel, C, f, isReduced = false, accuracy = accuracy, m = 10)
+    val (seidel, i2) = Solver.solve(SolveMethod.Seidel, C, f, isReduced = false, accuracy = accuracy, m = 10)
 
     println(simpleIterations)
     println(seidel)
 
     println(s"Simple accuracy: ${C * simpleIterations - f}, ${simpleIterations - cramer}")
     println(s"Seidel accuracy: ${C * seidel - f}, ${seidel - cramer}")
+  }
+    println("-----------------------")
+
+  val A = DenseMatrix(
+    (0.06,  0.17, 0.34, 0.16),
+    (0.32,  0.23, .0,   -0.35),
+    (0.16, -0.08, .0,   -0.12),
+    (0.09, 0.21, -0.13, .0)
+  )
+
+  val B = DenseVector(2.43, -1.12, 0.43, 0.83)
+
+
+  var simpleIters = ListBuffer[Int]()
+  var seidelIters = ListBuffer[Int]()
+  var powers = ListBuffer[Int]()
+
+  for (power <- 1 to 20) {
+    val accuracy = pow(10.0, -power)
+    println(s"Accuracy: $accuracy")
+
+    print("Simple iterations: ")
+    val (simpleIterations, i1) = Solver.solve(SolveMethod.SimpleIteration, A, B, isReduced = true, accuracy = accuracy)
+//    val simpleIterations = Solver.solve(SolveMethod.SimpleIteration, C, f, isReduced = false, accuracy = accuracy, m = 10)
+
+    print("Seidel iterations: ")
+    val (seidel, i2) = Solver.solve(SolveMethod.Seidel, A, B, isReduced = true, accuracy = accuracy)
+//    val seidel = Solver.solve(SolveMethod.Seidel, C, f, isReduced = false, accuracy = accuracy, m = 10)
+
+    println(simpleIterations)
+    println(seidel)
+
+    println(s"Simple accuracy: ${simpleIterations - (A * simpleIterations + B)}")
+    println(s"Seidel accuracy: ${seidel - (A * seidel + B)}")
 
     println()
 
+    simpleIters.append(i1)
+    seidelIters.append(i2)
+    powers.append(power)
   }
+
+    var fig = Figure()
+    var plt = fig.subplot(0)
+
+    plt += plot(powers, simpleIters, name = "Simple")
+    plt += plot(powers, seidelIters, name = "Seidel")
+
+    plt.legend = true
+
+    fig.refresh()
 
 
 //  println(cramer)

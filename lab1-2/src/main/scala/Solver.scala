@@ -3,6 +3,7 @@ import breeze.linalg.{sum, _}
 
 import math.{abs, pow, sqrt}
 import scala.Function.tupled
+import scala.ref.Reference
 
 object Solver {
 
@@ -54,7 +55,7 @@ object Solver {
     F: DenseVector[Double],
     maxIterations: Int = 100,
     accuracy: Double = 0.001
-  ): DenseVector[Double] = {
+  ): (DenseVector[Double], Int) = {
 
     val norms = List(C.norm1, C.norm2, C.normInfinity)
     val q = norms.min
@@ -62,6 +63,7 @@ object Solver {
     if (q >= 1)
       throw new Exception(s"Сходимость не может быть достигнута " +
         s"(коэффициент сходимости: $q)")
+    println(f"q = $q")
 
     var X = DenseVector.zeros[Double](F.size) // x₀
     var XPrev = X
@@ -76,8 +78,7 @@ object Solver {
       (q / (1 - q)) * (X - XPrev).normInfinity >= accuracy &&
         i < maxIterations
     )
-    println(i)
-    X
+    (X, i)
   }
 
   def solveSeidel(
@@ -85,13 +86,15 @@ object Solver {
    F: DenseVector[Double],
    maxIterations: Int = 100,
    accuracy: Double = 0.001
-  ): DenseVector[Double] = {
+  ): (DenseVector[Double], Int) = {
     val norms = List(C.norm1, C.norm2, C.normInfinity)
     val q = norms.min
 
     if (q >= 1)
       throw new Exception(s"Сходимость не может быть достигнута " +
         s"(коэффициент сходимости: $q)")
+
+    println(f"q = $q")
 
     var X = DenseVector.zeros[Double](F.size) // X₀
     var XPrev = X
@@ -108,8 +111,7 @@ object Solver {
       (q / (1 - q)) * (X - XPrev).normInfinity >= accuracy &&
         i < maxIterations
     )
-    println(i)
-    X
+    (X, i)
   }
 
   def solveCramer(C: DenseMatrix[Double], F: DenseVector[Double]): DenseVector[Double] = {
@@ -130,13 +132,13 @@ object Solver {
    maxIterations: Int = 100,
    accuracy: Double = 0.001,
    m: Double = 1.0
-  ): DenseVector[Double] = {
+  ): (DenseVector[Double], Int) = {
     val C = if (isReduced) A else reduceMatrix(A, m = m)
 
     method match {
       case SimpleIteration => solveSimpleIteration(C, F / m, maxIterations, accuracy)
       case Seidel => solveSeidel(C, F / m, maxIterations, accuracy)
-      case Cramer => solveCramer(C, F)
+      case Cramer => (solveCramer(C, F), 0)
     }
   }
 }
