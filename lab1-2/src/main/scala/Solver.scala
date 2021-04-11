@@ -50,6 +50,16 @@ object Solver {
       .reshape(A.rows, A.cols)
   }
 
+  def checkConvergence(C: DenseMatrix[Double]): Double = {
+    val norms = List(C.norm1, C.norm2, C.normInfinity)
+    val q = norms.min
+
+    if (q >= 1)
+      throw new Exception(s"Сходимость не может быть достигнута " +
+        s"(коэффициент сходимости: $q)")
+    q
+  }
+
   def solveSimpleIteration(
     C: DenseMatrix[Double],
     F: DenseVector[Double],
@@ -57,13 +67,7 @@ object Solver {
     accuracy: Double = 0.001
   ): (DenseVector[Double], Int) = {
 
-    val norms = List(C.norm1, C.norm2, C.normInfinity)
-    val q = norms.min
-
-    if (q >= 1)
-      throw new Exception(s"Сходимость не может быть достигнута " +
-        s"(коэффициент сходимости: $q)")
-    println(f"q = $q")
+    val q = checkConvergence(C)
 
     var X = DenseVector.zeros[Double](F.size) // x₀
     var XPrev = X
@@ -87,14 +91,8 @@ object Solver {
    maxIterations: Int = 100,
    accuracy: Double = 0.001
   ): (DenseVector[Double], Int) = {
-    val norms = List(C.norm1, C.norm2, C.normInfinity)
-    val q = norms.min
 
-    if (q >= 1)
-      throw new Exception(s"Сходимость не может быть достигнута " +
-        s"(коэффициент сходимости: $q)")
-
-    println(f"q = $q")
+    val q = checkConvergence(C)
 
     var X = DenseVector.zeros[Double](F.size) // X₀
     var XPrev = X
@@ -125,9 +123,19 @@ object Solver {
   }
 
   def solve(
-   method: SolveMethod,
    A: DenseMatrix[Double],
    F: DenseVector[Double],
+   method: SolveMethod = SolveMethod.Seidel,
+   isReduced: Boolean = false,
+   maxIterations: Int = 100,
+   accuracy: Double = 0.001,
+   m: Double = 1.0
+  ): DenseVector[Double] = solveDebug(A, F, method, isReduced, maxIterations, accuracy, m)._1
+
+  def solveDebug(
+   A: DenseMatrix[Double],
+   F: DenseVector[Double],
+   method: SolveMethod = SolveMethod.Seidel,
    isReduced: Boolean = false,
    maxIterations: Int = 100,
    accuracy: Double = 0.001,
