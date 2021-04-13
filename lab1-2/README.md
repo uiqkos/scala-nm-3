@@ -4,44 +4,38 @@
 Пусть система из  уравнений с *n* неизвестными
 
 
-$$\left\{\begin{array}{c} a_{11} x_{1}+a_{12} x_{2}+\cdots+a_{1 n} x_{n}=b_{1} \\ a_{21} x_{1}+a_{22} x_{2}+\cdots+a_{2 n} x_{n}=b_{2} \\ \vdots \\ a_{m 1} x_{1}+a_{m 2} x_{2}+\cdots+a_{m n} x_{n}=b_{m} \end{array}\right.
-$$
+$$\left\{\begin{array}{c} a_{11} x_{1}+a_{12} x_{2}+\cdots+a_{1 n} x_{n}=b_{1} \\ a_{21} x_{1}+a_{22} x_{2}+\cdots+a_{2 n} x_{n}=b_{2} \\ \vdots \\ a_{m 1} x_{1}+a_{m 2} x_{2}+\cdots+a_{m n} x_{n}=b_{m} \end{array}\right.$$
 
 
 записана
 в векторно-матричной форме<br>
 
 
-$$Ax = b
-$$
+$$Ax = b$$
 
 
 и приведена к виду
 
 
-$$x = Cx + f
-$$
+$$x = Cx + f$$
 
 
 Подставляя начальное приближение
 
 
-$$x^{(1)}=C x^{(0)}+f
-$$
+$$x^{(1)}=C x^{(0)}+f$$
 
 
 и
 
 
-$$x^{(k+1)}=C x^{(k)}+f, k=0,1,2 \ldots
-$$
+$$x^{(k+1)}=C x^{(k)}+f, k=0,1,2 \ldots$$
 
 
 Справедлива следующая оценка абсолютной погрешности k-го приближения
 
 
-$$\Delta=\left\|x^{(k)}-\bar{x}\right\| \leq \frac{q}{1-q}\left\|x^{(k)}-x^{(k-1)}\right\|
-$$
+$$\Delta=\left\|x^{(k)}-\bar{x}\right\| \leq \frac{q}{1-q}\left\|x^{(k)}-x^{(k-1)}\right\|$$
 
 
 <br>
