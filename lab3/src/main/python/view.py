@@ -15,11 +15,11 @@ def latex_by_coefs(coefs):
 
 def plot_splines(n: int):
     data = np.genfromtxt(
-        f'C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\spline{n}_data.txt', delimiter=',')
+        f'C:\\Users\\uiqko\\IdeaProjects\\scala-nm-3\\lab3\\data\\spline{n}_data.txt', delimiter=',')
     X, Y = np.genfromtxt(
-        'C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\axes.txt', delimiter=',')
+        'C:\\Users\\uiqko\\IdeaProjects\\scala-nm-3\\lab3\\data\\axes.txt', delimiter=',')
     labels = np.genfromtxt(
-        f'C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\spline{n}_labels.txt', delimiter=',')
+        f'C:\\Users\\uiqko\\IdeaProjects\\scala-nm-3\\lab3\\data\\spline{n}_labels.txt', delimiter=',')
 
     fig = px.scatter(
         x=X,
@@ -85,4 +85,4 @@ def plot_newton():
     pass
 
 
-plot_splines(9)
+plot_splines(3)

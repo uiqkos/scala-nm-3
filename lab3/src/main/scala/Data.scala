@@ -1,5 +1,4 @@
 import SplineData.fSpline2
-import org.apache.commons.math3.analysis.interpolation.SplineInterpolator
 import smile.data.DataFrame
 import smile.stat.Hypothesis.F
 import smile.write
