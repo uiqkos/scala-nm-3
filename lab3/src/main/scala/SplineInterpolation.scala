@@ -17,7 +17,7 @@ object SplineInterpolation {
   }
 }
 
-class SplineInterpolation(val X: Array[Double], val Y: Array[Double], val dim: Int = 2) {
+class SplineInterpolation(val X: Array[Double], val Y: Array[Double], val dim: Int = 2) extends Interpolation {
   val intervals: Array[(Double, Double)] = X
     .sliding(dim)
     .map(x => (x.head, x.last))

@@ -29,7 +29,7 @@ class Test extends AnyFlatSpec {
       val X = generateRandomArray(n)
       val Y = generateRandomArray(n)
 
-      val f = Lagrange.interpolate(X, Y)
+      val f = new LagrangeInterpolation(X, Y)
 
       X.zip(Y).forall(tupled(
         (x, y) => f(x) == y
@@ -44,7 +44,7 @@ class Test extends AnyFlatSpec {
       val X = generateRandomArray(n)
       val Y = generateRandomArray(n)
 
-      val f = Newton.interpolate(X, Y)
+      val f = new NewtonInterpolation(X, Y)
 
       X.zip(Y).forall(tupled(
         (x, y) => f(x) - y < 1e-4
