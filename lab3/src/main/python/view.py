@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 from fn.monad import Full
 
+res_path = "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\res"
+data_path = res_path + "/data"
+
 
 def latex_by_coefs(coefs):
     return f'$y = ' + f'{coefs[0]}x^{len(coefs) - 1}' + ''.join([
@@ -16,9 +19,9 @@ def latex_by_coefs(coefs):
 
 def plot_spline_f(n: int):
     df = pd.read_csv(
-        f'C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\spline{n}_data.csv', header=0)
+        f'{data_path}/spline{n}_data.csv', header=0)
     axes = pd.read_csv(
-        'C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\axes.csv', header=0)
+        f'{data_path}/axes.csv', header=0)
 
     X_full = df['X']
     df.drop('X', axis=1, inplace=True)
@@ -67,19 +70,23 @@ def plot_spline_f(n: int):
         range=[-7.0, 7.0]
     )
 
-    fig.to_html("splines.html")
-    fig.show()
+    return fig
+
+
+def save_html(figure: go.Figure, file_name: str):
+    open(f'{res_path}/plots/{file_name}.html', 'w').write(figure.to_html())
 
 
 if __name__ == '__main__':
 
-    # plot_spline_f(2)
-    # plot_spline_f(3)
-    # plot_spline_f(4)
-    # plot_spline_f(5)
+    to_html = list(zip([
+        plot_spline_f(2),
+        plot_spline_f(3),
+        plot_spline_f(4),
+    ], ['spline2', 'spline3', 'spline4']))
 
-    df = pd.read_csv("C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\data.csv", header=0)
-    axes = pd.read_csv("C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\data\\axes.csv", header=0)
+    df = pd.read_csv(data_path + "/data.csv", header=0)
+    axes = pd.read_csv(data_path + "/axes.csv", header=0)
 
     X = df['X']
 
@@ -94,5 +101,7 @@ if __name__ == '__main__':
             name=df.columns[i]
         )
 
-    fig.show()
+    to_html.append((fig, 'all'))
+    for fig, name in to_html:
+        save_html(fig, name)
 

@@ -18,3 +18,5 @@ libraryDependencies ++= Seq(
   "org.bytedeco" % "javacpp"   % "1.5.4"        classifier "windows-x86_64" ,
   "org.bytedeco" % "arpack-ng" % "3.7.0-1.5.4"  classifier "windows-x86_64"
 )
+// https://mvnrepository.com/artifact/org.scala-lang.modules/scala-swing
+libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0"

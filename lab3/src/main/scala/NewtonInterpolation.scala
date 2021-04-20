@@ -1,4 +1,5 @@
 import NewtonInterpolation.dividedDifference
+
 import scala.Function.tupled
 
 object NewtonInterpolation {
@@ -10,9 +11,9 @@ object NewtonInterpolation {
 }
 
 class NewtonInterpolation(
-  val X: Array[Double],
-  val Y: Array[Double],
-  val h: Double = 1.0
+    val X:Array[Double],
+    val Y:Array[Double],
+    val h:Double=1.0
 ) extends Interpolation {
   val dividedDifferences: Array[Array[Double]] = X
     .indices
