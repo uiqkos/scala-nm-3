@@ -1,5 +1,6 @@
 import Test.generateRandomArray
 import breeze.linalg.{DenseVector, Matrix, Vector}
+import interpolation.{LagrangeInterpolation, NewtonInterpolation, SplineInterpolation}
 import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.Function.tupled

@@ -1,3 +1,5 @@
+import sys
+
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
@@ -78,12 +80,12 @@ def save_html(figure: go.Figure, file_name: str):
 
 
 if __name__ == '__main__':
+    dims = list(map(int, sys.argv[1:]))
 
-    to_html = list(zip([
-        plot_spline_f(2),
-        plot_spline_f(3),
-        plot_spline_f(4),
-    ], ['spline2', 'spline3', 'spline4']))
+    to_html = []
+
+    for dim in dims:
+        to_html.append((plot_spline_f(dim), f'spline{dim}'))
 
     df = pd.read_csv(data_path + "/data.csv", header=0)
     axes = pd.read_csv(data_path + "/axes.csv", header=0)
@@ -105,3 +107,4 @@ if __name__ == '__main__':
     for fig, name in to_html:
         save_html(fig, name)
 
+    exit(0)

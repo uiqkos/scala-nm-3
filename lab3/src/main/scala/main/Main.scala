@@ -1,4 +1,6 @@
+package main
 
+import interpolation.Interpolator
 
 object Main extends App {
 

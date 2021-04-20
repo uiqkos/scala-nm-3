@@ -1,4 +1,6 @@
-import scala.math.{pow, random}
+package main
+
+import scala.math.pow
 
 object Util {
   implicit class CustomDouble(x: Double) {

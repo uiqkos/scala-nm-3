@@ -1,4 +1,6 @@
-import NewtonInterpolation.dividedDifference
+package interpolation
+
+import interpolation.NewtonInterpolation.dividedDifference
 
 import scala.Function.tupled
 

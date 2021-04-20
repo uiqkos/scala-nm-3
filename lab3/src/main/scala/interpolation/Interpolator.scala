@@ -1,14 +1,19 @@
+package interpolation
+
 import breeze.io.CSVWriter
+import interpolation.Interpolator.dataPath
 
 import java.io.File
 import scala.language.postfixOps
 
-class Interpolator(val X: Array[Double], val Y: Array[Double]) {
-
-//  val dataPath: String = getClass.getResource("data").getPath
-
+object Interpolator {
+  //  val dataPath: String = getClass.getResource("data").getPath
   val dataPath = "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\res\\data"
+  val resPath = "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\res"
+  val plotsPath = "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\res\\plots"
+}
 
+class Interpolator(val X: Array[Double], val Y: Array[Double]) {
   CSVWriter.writeFile(
     new File(dataPath + "/axes.csv"),
     IndexedSeq("X", "Y") +: IndexedSeq(X.map(_.toString), Y.map(_.toString)).transpose,

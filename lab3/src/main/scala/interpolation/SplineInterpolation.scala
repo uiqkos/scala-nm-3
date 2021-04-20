@@ -1,4 +1,6 @@
-import SplineInterpolation.Spline
+package interpolation
+
+import interpolation.SplineInterpolation.Spline
 import smile.math.MathEx.c
 import smile.math.matrix.{Matrix, matrix}
 import smile.math.{VectorLift, inv, matrix2MatrixExpression}

@@ -1,5 +1,8 @@
-import LagrangeInterpolation.basisPolynomial
-import Util.IgnoreIterable
+package interpolation
+
+import interpolation.LagrangeInterpolation.basisPolynomial
+import main.Util._
+
 import scala.Function.tupled
 
 object LagrangeInterpolation {
