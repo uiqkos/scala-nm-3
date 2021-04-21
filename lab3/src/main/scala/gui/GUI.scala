@@ -16,6 +16,8 @@ object GUI extends App {
 
     val XTextArea = new TextArea("0.259, 0.841, 1.562, 2.304, 2.856, 3.0")
     val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0")
+//    val XTextArea = new TextArea("0.5, 2.0, 3.5, 5.0, 6.5, 8.0, 9.5, 11.0, 12.5, 14.0, 15.5")
+//    val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0, -4.3, -3.0, -1.0, -2.5, 1.6")
 
     val pane = new Label()
 
@@ -35,7 +37,7 @@ object GUI extends App {
             val Y = YTextArea.text.split(", ").map(_.toDouble)
 
             val interpolator = new Interpolator(X, Y)
-            interpolator.writeAll()(2, 3, 4)
+            interpolator.writeAll(1.5)(2, 3, 4)
             interpolator.writeSplines(2, 3, 4)
 
             Seq(
@@ -44,9 +46,7 @@ object GUI extends App {
               "2", "3", "4"
             ).!
 
-//            sleep(2000)
-
-            val htmlPlots = Seq("all.html", "spline2.html", "spline3.html", "spline4.html")
+            val htmlPlots = Seq("all.html") //, "spline2.html", "spline3.html", "spline4.html"
               .map(name => new File(s"${Interpolator.plotsPath}/${name}").toURI)
 
             htmlPlots.foreach {

@@ -24,7 +24,7 @@ class Interpolator(val X: Array[Double], val Y: Array[Double]) {
     val xFull = (BigDecimal(X(0)) to X.last by 0.001).map(_.toDouble)
 
     val fLagrange = new LagrangeInterpolation(X, Y)
-    val fNewton = new NewtonInterpolation(X, Y, newTon_h)
+    val fNewton = new NewtonInterpolation(X, Y)
 
     val splines = spline_dims.map(new SplineInterpolation(X, Y, _))
 
