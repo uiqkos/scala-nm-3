@@ -1,10 +1,7 @@
 import sys
-
 import plotly.graph_objects as go
 import plotly.express as px
-import numpy as np
 import pandas as pd
-from fn.monad import Full
 
 res_path = "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\lab3\\res"
 data_path = res_path + "/data"

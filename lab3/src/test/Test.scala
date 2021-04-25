@@ -13,7 +13,7 @@ object Test {
 class Test extends AnyFlatSpec {
   "Splines count" should "be equal n - dim + 1" in {
     for (dim <- 2 to 4) assert {
-      val n = Random.nextInt(100)
+      val n = Random.nextInt(100) + 3
       val splines = new SplineInterpolation(
         generateRandomArray(n),
         generateRandomArray(n),
@@ -25,7 +25,7 @@ class Test extends AnyFlatSpec {
 
   "Lagrange approximation" should "go through the starting points" in {
     for (i <- 0 to 10) assert {
-      val n = Random.nextInt(100)
+      val n = Random.nextInt(100) + 3
 
       val X = generateRandomArray(n)
       val Y = generateRandomArray(n)
@@ -40,22 +40,27 @@ class Test extends AnyFlatSpec {
 
   "Newton approximation" should "go through the starting points" in {
     for (i <- 0 to 10) assert {
-      val n = Random.nextInt(100)
+      val n = Random.nextInt(100) + 3
 
-      val X = generateRandomArray(n)
+      val X = (BigDecimal(0) until n by 1.0).map(_.toDouble).toArray
       val Y = generateRandomArray(n)
+
+      println(n)
 
       val f = new NewtonInterpolation(X, Y)
 
       X.zip(Y).forall(tupled(
-        (x, y) => f(x) - y < 1e-4
+        (x, y) => {
+          println(f(x) - y)
+          f(x) == y
+        }
       ))
     }
   }
 
   "Spline approximation" should "go through the starting points" in {
     for (i <- 0 to 10) assert {
-      val n = Random.nextInt(100)
+      val n = Random.nextInt(100) + 3
 
       val X = generateRandomArray(n)
       val Y = generateRandomArray(n)
@@ -63,7 +68,8 @@ class Test extends AnyFlatSpec {
       val f = new SplineInterpolation(X, Y)
 
       X.zip(Y).forall(tupled(
-        (x, y) => f(x) - y < 1e-4
+        (x, y) => f(x) == y
+//        (x, y) => f(x) - y < 1e-4
       ))
     }
   }

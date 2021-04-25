@@ -31,23 +31,9 @@ class NewtonInterpolation(
     val Y:Array[Double]
 ) extends Interpolation {
 
-//  val dividedDifferences: Array[Array[Double]] = X
-//    .indices
-//    .drop(1)
-//    .foldLeft(
-//      Array(Y)
-//    )((l, i) => l :+ dividedDifference(X.sliding(2).map(arr => arr.head + arr.last).toArray, l.last))
-
-  def apply(x: Double): Double =
-    X
-    .dropRight(1)
-    .reverse
-    .map(x - _)
-    .tails
-    .map(_.product)
-    .toSeq
-    .reverse
-    .zipWithIndex
-    .map(tupled((x, i) => dividedDifference(X.take(i + 1), Y.take(i + 1)) * x))
-    .sum
+  def apply(x: Double): Double = X
+    .indices
+    .drop(1)
+    .map(i => X.take(i).map(xi => x - xi).product * dividedDifference(X.take(i + 1), Y.take(i + 1)))
+    .sum + Y(0)
 }

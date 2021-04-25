@@ -14,10 +14,10 @@ object GUI extends App {
   new Frame {
     title = ""
 
-    val XTextArea = new TextArea("0.259, 0.841, 1.562, 2.304, 2.856, 3.0")
-    val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0")
-//    val XTextArea = new TextArea("0.5, 2.0, 3.5, 5.0, 6.5, 8.0, 9.5, 11.0, 12.5, 14.0, 15.5")
-//    val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0, -4.3, -3.0, -1.0, -2.5, 1.6")
+//    val XTextArea = new TextArea("0.259, 0.841, 1.562, 2.304, 2.856, 3.0")
+//    val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0")
+    val XTextArea = new TextArea("0.5, 2.0, 3.5, 5.0, 6.5, 8.0, 9.5, 11.0, 12.5, 14.0, 15.5")
+    val YTextArea = new TextArea("0.018, -1.259, -1.748, -0.532, 0.911, 1.0, -4.3, -3.0, -1.0, -2.5, 1.6")
 
     val pane = new Label()
 
@@ -37,16 +37,24 @@ object GUI extends App {
             val Y = YTextArea.text.split(", ").map(_.toDouble)
 
             val interpolator = new Interpolator(X, Y)
-            interpolator.writeAll(1.5)(2, 3, 4)
-            interpolator.writeSplines(2, 3, 4)
+            val splineDims = Seq() //2, 3, 4, 7
+            interpolator.writeAll(1.5)(splineDims)
+            interpolator.writeSplines(splineDims)
 
-            Seq(
-              "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\venv\\Scripts\\python.exe",
-              "C:/Users/Uiqkos/IdeaProjects/scala-nm-3/lab3/src/main/python/view.py",
-              "2", "3", "4"
-            ).!
+            val (fLagrange, fNewton, splines) = interpolator.writeAll(1.5)(splineDims)
 
-            val htmlPlots = Seq("all.html") //, "spline2.html", "spline3.html", "spline4.html"
+
+            println(fLagrange(X(1) + X(2)))
+            println(fNewton(X(1) + X(2)))
+
+            {
+              Seq(
+                "C:\\Users\\Uiqkos\\IdeaProjects\\scala-nm-3\\venv\\Scripts\\python.exe",
+                "C:/Users/Uiqkos/IdeaProjects/scala-nm-3/lab3/src/main/python/view.py",
+              ) ++ splineDims.map(_.toString)
+            }.!
+
+            val htmlPlots = (Seq("all.html") ++ splineDims.map(dim => s"spline$dim.html"))
               .map(name => new File(s"${Interpolator.plotsPath}/${name}").toURI)
 
             htmlPlots.foreach {

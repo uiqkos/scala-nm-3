@@ -20,7 +20,7 @@ class Interpolator(val X: Array[Double], val Y: Array[Double]) {
     quote = Char.MinValue
   )
 
-  def writeAll(newTon_h: Double = 1.0)(spline_dims: Int*): Unit = {
+  def writeAll(newTon_h: Double = 1.0)(spline_dims: Seq[Int]): (LagrangeInterpolation, NewtonInterpolation, Seq[SplineInterpolation]) = {
     val xFull = (BigDecimal(X(0)) to X.last by 0.001).map(_.toDouble)
 
     val fLagrange = new LagrangeInterpolation(X, Y)
@@ -36,12 +36,14 @@ class Interpolator(val X: Array[Double], val Y: Array[Double]) {
 
     CSVWriter.writeFile(
       new File(dataPath + "/data.csv"),
-       columns +: dfData.transpose,
+      columns +: dfData.transpose,
       quote = Char.MinValue
     )
+    (fLagrange, fNewton, splines)
   }
 
-  def writeSplines(dims: Int*): Unit = {
+
+  def writeSplines(dims: Seq[Int]): Unit = {
     val XFull = BigDecimal(X(0)) to X.last by 0.001 map(_.toDouble)
     dims
       .map(new SplineInterpolation(X, Y, _))
