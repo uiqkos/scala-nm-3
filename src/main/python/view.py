@@ -8,6 +8,7 @@ data_path = res_path + "/data"
 
 
 def latex_by_coefs(coefs):
+    coefs = [round(i, 3) for i in coefs]
     return f'$y = ' + f'{coefs[0]}x^{len(coefs) - 1}' + ''.join([
         f'{coefs[i] if coefs[i] < 0 else "+" + str(coefs[i])}'
         f'{f"x^{len(coefs) - i - 1}" if i < len(coefs) - 2 else ("x" if i < len(coefs) - 1 else "")}'
@@ -102,6 +103,7 @@ if __name__ == '__main__':
 
     to_html.append((fig, 'all'))
     for fig, name in to_html:
-        save_html(fig, name)
+        fig.show()
+        # save_html(fig, name)
 
     exit(0)

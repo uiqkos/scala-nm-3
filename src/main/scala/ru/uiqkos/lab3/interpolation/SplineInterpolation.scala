@@ -34,6 +34,6 @@ class SplineInterpolation(val X: Array[Double], val Y: Array[Double], val dim: I
   def apply(x: Double): Double = F
     .zip(intervals)
     .find(tupled(
-      (f, interval) => interval._1 <= x && x <= interval._2
-    )).get._1(x)
+      (f, interval) => /*interval._1 <= x &&*/ x <= interval._2
+    )).getOrElse((F.last, (.0, .0)))._1(x)
 }

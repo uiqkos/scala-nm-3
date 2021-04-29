@@ -20,3 +20,7 @@ libraryDependencies ++= Seq(
 )
 // https://mvnrepository.com/artifact/org.scala-lang.modules/scala-swing
 libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0"
+// https://mvnrepository.com/artifact/org.plotly-scala/plotly-core
+libraryDependencies += "org.plotly-scala" %% "plotly-core" % "0.8.2"
+// https://mvnrepository.com/artifact/org.plotly-scala/plotly-render
+libraryDependencies += "org.plotly-scala" %% "plotly-render" % "0.8.2"

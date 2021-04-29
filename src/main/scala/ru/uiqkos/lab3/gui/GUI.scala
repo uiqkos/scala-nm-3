@@ -34,7 +34,7 @@ object GUI extends App {
             val Y = YTextArea.text.split(", ").map(_.toDouble)
 
             val interpolator = new Interpolator(X, Y)
-            val splineDims = Seq() //2, 3, 4, 7
+            val splineDims = Seq(2, 3, 4, 7) //2, 3, 4, 7
             interpolator.writeAll(1.5)(splineDims)
             interpolator.writeSplines(splineDims)
 

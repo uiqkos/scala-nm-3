@@ -30,4 +30,7 @@ class NewtonInterpolation(
     .drop(1)
     .map(i => X.take(i).map(xi => x - xi).product * dividedDifferences(i).head)
     .sum + Y(0)
+
+
+
 }
