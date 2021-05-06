@@ -1,5 +1,5 @@
 rectangular(Y::Array{Float64}, h::Float64 = 0.001) = h * sum(Y[1:length(Y) - 1])
-trapezoid(Y::Array{Float64}, h::Float64 = 0.001) = (h / 2) * (Y[1] + 2 * sum(Y[2:length(Y) - 1]) + Y[length(Y)])
+trapezoid(Y::Array{Float64}, h::Float64 = 0.001) = (h / 2) * (Y[1] + 2 * sum(Y[2:length(Y) - 1]) + Y[end])
 simpson(Y::Array{Float64}, h::Float64 = 0.001) = (h / 3) * (Y[1] + Y[end] + 2 * sum(Y[2:2:length(Y) - 2]) + 4 * sum(Y[1:2:length(Y)-1]))
 
 function integral(f::Function, a::Float64, b::Float64; I::Function = trapezoid, ϵ::Float64 = 0.001, nₒ::Int64 = 10)
